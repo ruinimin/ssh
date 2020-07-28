@@ -1,0 +1,47 @@
+#服务名
+spring:
+  profiles: dev
+  application:
+    name: advert-service
+  datasource:
+    username: sa
+    password: sae
+    #jdbc-url: jdbc:mysql://180.106.83.239:46986/cxcm_test_test?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:sqlserver://172.16.19.243:1433;SelectMethod=cursor;DatabaseName=SpcloudTest
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 10
+      min-idle: 10
+      max-active: 20
+      max-wait: 100
+      #配置多久检测一次空闲连接（可以选择是否尽早关闭连接，看压力在server还是数据库端）
+      time-between-eviction-runs-millis: 60000
+      #监控统计: filter:stat
+      # 	日志监控: filter:log4j 或者 slf4j
+      # 	防御SQL注入: filter:wall
+      filters: wall,stat
+      time-between-connect-error-millis: 3000
+      #数据库连接最小生存时间
+      min-evictable-idle-time-millis: 300000
+      #检查连接正常的sql
+      validation-query: select 1 from dual
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+mybatis:
+  mapper-locations: classpath*:mapping/**/*.xml
+#暴露的端口号
+server:
+  port: 9011
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    serviceUrl:
+      defaultZone: https://${eureka.instance.hostname}:${server.port}/eureka/
+    registerWithEureka: false
+    #代表不向注册中心注册自己
+    fetchRegistry: false
